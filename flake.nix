@@ -33,19 +33,18 @@
   };
   outputs = { self, flake-parts, invokeai-src, hercules-ci-effects, llama, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      perSystem = { system, ... }: {
+      perSystem = { config, system, ... }: {
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
           inherit system;
           overlays = [
             self.overlays.default
-            #inputs.llama.overlays.default
           ];          
         };
-      #packages = {        
-      #    llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
-      #    llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
-      #  };
+      packages = {        
+          llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
+          llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
+        };
       };
       systems = [  "x86_64-linux"];
       debug = true;

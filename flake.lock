@@ -102,15 +102,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1703103816,
-        "narHash": "sha256-s3TFe5ggf+TuDPNg6wUwnEEDvYtMffxkdlzkro818Wg=",
-        "owner": "AtaraxiaSjel",
+        "lastModified": 1710934998,
+        "narHash": "sha256-D9PVm/wCfXc8dcFtEfVV0kKkdH7ZC64Ytts70+hXBgo=",
+        "owner": "ksenia-portu",
         "repo": "llama-cpp-python-flake",
-        "rev": "9b9f2daaed54d5f5871c858e6f0672918911a821",
+        "rev": "cbd36b22e0d7fe2db402260b965a840e1f1435f4",
         "type": "github"
       },
       "original": {
-        "owner": "AtaraxiaSjel",
+        "owner": "ksenia-portu",
         "repo": "llama-cpp-python-flake",
         "type": "github"
       }

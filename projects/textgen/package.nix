@@ -82,7 +82,7 @@ let
     datasets
     flexgen
     gradio
-    llama-cpp-python
+    #llama-cpp-python
     markdown
     numpy
     pandas

@@ -19,7 +19,7 @@
       flake = false;
     };
     llama = {
-      url = "github:AtaraxiaSjel/llama-cpp-python-flake/";
+      url = "github:ksenia-portu/llama-cpp-python-flake";
       flake = true;
     };
     flake-parts = {
@@ -39,7 +39,7 @@
           inherit system;
         };
         packages = {        
-          llama-cpp        = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp; 
+          llama-cpp        = inputs.llama.llama-cpp.packages.${system}.llama-cpp; 
           llama-cpp-python = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp-python; 
         };
       };

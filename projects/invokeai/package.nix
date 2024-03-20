@@ -17,8 +17,8 @@ let
     #binutils
     #clblast
     #opencl-headers    
-    #openblas
-    #llama-cpp
+    openblas
+    llama-cpp
     gperftools 
     dlib
     ffmpeg
@@ -56,9 +56,9 @@ python3Packages.buildPythonPackage {
   version = getVersion src;
   inherit src;
   propagatedBuildInputs = with python3Packages; [
+    #llama-cpp-python
     typing-extensions
     kiui
-    #llama-cpp-python
     hub-sdk
     ultralytics
     zhipuai

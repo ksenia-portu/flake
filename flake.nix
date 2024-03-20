@@ -37,16 +37,17 @@
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
           inherit system;
-          overlays = [ self.overlays.default];          
+          #overlays = [ self.overlays.default];          
         };
         #overlayAttrs = {
         #  llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
         #  llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
-        #};        
+        #};       
         packages = {        
           llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
           llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
         };
+        overlayAttrs = config.packages;
       };
       systems = [  "x86_64-linux"];
       debug = true;

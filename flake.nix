@@ -36,20 +36,15 @@
       perSystem = { system, ... }: {
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
-          inherit system; 
-          llamaOverlay = (
-            final: prev: {
-              llama-cpp-python = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp-python; 
-              llama-cpp = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp; 
-            });
-          overlays = [llamaOverlay];
-          #overlays = [inputs.llama]; 
+          inherit system;
         };
-
+        packages = {        
+          llama-cpp        = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp; 
+          llama-cpp-python = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp-python; 
+        };
       };
-      systems = [
-        "x86_64-linux"
-      ];
+
+      systems = [  "x86_64-linux"];
       debug = true;
       imports = [
         hercules-ci-effects.flakeModule

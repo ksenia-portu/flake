@@ -39,8 +39,8 @@
           inherit system;
         };
         packages = {        
-          llama-cpp        = inputs.llama.llama-cpp.packages.${system}.llama-cpp; 
-          llama-cpp-python = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp-python; 
+          llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
+          llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
         };
       };
 

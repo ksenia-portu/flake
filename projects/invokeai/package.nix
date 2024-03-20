@@ -2,6 +2,8 @@
 # misc
 , lib
 , src
+, pkgs
+#, pkgs'
 # extra deps
 }:
 
@@ -11,6 +13,41 @@ let
     (builtins.match ".*__version__ = \"([^\"]+)\".*")
     builtins.head
   ];
+  essentials = with pkgs; [
+    #binutils
+    #clblast
+    #opencl-headers    
+    #openblas
+    #llama-cpp
+    gperftools 
+    dlib
+    ffmpeg
+    #gcc
+    gcc13
+    git
+    glib
+    glibc
+    gmp
+    libsForQt5.full
+    libcxx
+    libffi
+    libffi.dev
+            libGL
+            libGLU
+            stdenv.cc
+            stdenv.cc.cc
+            zlib
+            zlib.dev
+            zsh
+            #python311Packages.pyqt5
+          ];
+  cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
+  #nvidialib = "${pkgs.linuxPackages.nvidiaPackages.stable}/lib";
+  opengllib = "/run/opengl-driver/lib";
+  libpath = pkgs.lib.makeLibraryPath essentials; 
+  LD_LIBRARY_PATH="${cclib}:${opengllib}:${libpath}";
+  CUDA_PATH = pkgs.cudatoolkit;
+  EXTRA_LDFLAGS = "-L${pkgs.linuxPackages.nvidia_x11}/lib";
 in
 
 python3Packages.buildPythonPackage {
@@ -19,6 +56,43 @@ python3Packages.buildPythonPackage {
   version = getVersion src;
   inherit src;
   propagatedBuildInputs = with python3Packages; [
+    typing-extensions
+    kiui
+    #llama-cpp-python
+    hub-sdk
+    ultralytics
+    zhipuai
+    #pymeshlab
+    segment_anything
+    deepdiff
+    diskcache
+    insightface
+    lpips
+    moviepy
+    natsort
+    numexpr
+    openai
+    #open-clip-torch 
+    piexif
+    plyfile
+    pynvml
+    pyqt5
+    pyhocon
+    scikit-build
+    simpleeval
+    trimesh
+    wrapt
+    #ultralytics
+    pyopenssl
+    watchdog
+    gdown
+    xformers
+    huggingface-hub
+    gradio
+    gradio-client
+    pygit2
+
+    py-cpuinfo
     semver
     mediapipe
     numpy
@@ -113,6 +187,14 @@ python3Packages.buildPythonPackage {
       '
     ''
   ];
+  shellHook = ''
+    echo "Entering dev shell"
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+    export TCMALLOC="" 
+    export EXTRA_LDFLAGS=""
+    #echo  $LD_LIBRARY_PATH
+    #echo "it's all relative"
+  '';
   patchPhase = ''
     runHook prePatch
 

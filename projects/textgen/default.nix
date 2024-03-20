@@ -17,7 +17,7 @@ in
         ../../packages/gradio-client
         ../../packages/analytics-python
         ../../packages/ffmpy
-        ../../packages/llama-cpp-python
+        #../../packages/llama-cpp-python
         ../../packages/rwkv
         ../../packages/autogptq
         ../../packages/rouge

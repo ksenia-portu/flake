@@ -18,6 +18,10 @@
       url = "github:oobabooga/text-generation-webui/v1.7";
       flake = false;
     };
+    llama = {
+      url = "github:AtaraxiaSjel/llama-cpp-python-flake/";
+      flake = true;
+    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -27,21 +31,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { flake-parts, invokeai-src, hercules-ci-effects, ... }@inputs:
+  outputs = { flake-parts, invokeai-src, hercules-ci-effects, llama, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       perSystem = { system, ... }: {
-        _module.args.pkgs = import inputs.nixpkgs { config.allowUnfree = true; inherit system; };
-        legacyPackages = {
-          koboldai = builtins.throw ''
+        _module.args.pkgs = import inputs.nixpkgs { 
+          config.allowUnfree = true; 
+          inherit system; 
+          linuxHomeOverlay = (
+            final: prev: {
 
-
-                   koboldai has been dropped from nixified.ai due to lack of upstream development,
-                   try textgen instead which is better maintained. If you would like to use the last
-                   available version of koboldai with nixified.ai, then run:
-
-                   nix run github:nixified.ai/flake/0c58f8cba3fb42c54f2a7bf9bd45ee4cbc9f2477#koboldai
-          '';
+              llama-cpp-python = inputs.llama.llama-cpp-python; 
+              llama-cpp = inputs.llama.llama-cpp; 
+              #llama-cpp-python = inputs.llama.legacyPackages.${system}.llama-cpp-python; 
+              #llama-cpp = inputs.llama.legacyPackages.${system}.llama-cpp; 
+            });
         };
+
       };
       systems = [
         "x86_64-linux"

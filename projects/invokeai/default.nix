@@ -10,6 +10,16 @@ in
     commonOverlays = [
       overlays.python-fixPackages
       (l.overlays.callManyPackages [
+        #../../packages/llama-cpp-python
+        ../../packages/timm
+        ../../packages/zhipuai
+        ../../packages/kiui
+        ../../packages/hub-sdk
+        #../../packages/pymeshlab
+        ../../packages/ultralytics
+        ../../packages/plyfile
+        ../../packages/segment_anything
+        ../../packages/lpips
         ../../packages/mediapipe
         ../../packages/safetensors
         ../../packages/easing-functions
@@ -30,7 +40,7 @@ in
         ../../packages/realesrgan
         ../../packages/codeformer
         ../../packages/clipseg
-        ../../packages/kornia
+        #../../packages/kornia
         ../../packages/picklescan
         ../../packages/diffusers
         ../../packages/pypatchmatch
@@ -64,10 +74,18 @@ in
     ];
 
     python3Variants = {
-      amd = l.overlays.applyOverlays pkgs.python3Packages (commonOverlays ++ [
-        overlays.python-torchRocm
-      ]);
-      nvidia = l.overlays.applyOverlays pkgs.python3Packages (commonOverlays ++ [
+      amd = 
+        l.overlays.applyOverlays 
+        pkgs.python3Packages 
+        ( commonOverlays ++ [
+          overlays.python-torchRocm
+        ]
+        );
+      nvidia = 
+        l.overlays.applyOverlays 
+        #pkgs' 
+        pkgs.python3Packages 
+        (commonOverlays ++ [
         overlays.python-torchCuda
       ]);
     };

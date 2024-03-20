@@ -1,0 +1,1 @@
+nix develop .#invokeai-nvidia

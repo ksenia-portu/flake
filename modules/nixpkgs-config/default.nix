@@ -15,6 +15,7 @@
           "cuda_cccl"
           "cuda_cupti"
           "cuda_nvprof"
+          "cuda_nvml_dev"
           "cudatoolkit"
           "cudatoolkit-11-cudnn"
           "libcublas"

@@ -45,12 +45,11 @@
               #llama-cpp-python = inputs.llama.legacyPackages.${system}.llama-cpp-python; 
               #llama-cpp = inputs.llama.legacyPackages.${system}.llama-cpp; 
             });
+          overlays = [inputs.llama]; 
         };
 
       };
-      systems = [
-        "x86_64-linux"
-      ];
+      systems = [ "x86_64-linux"];
       debug = true;
       imports = [
         hercules-ci-effects.flakeModule

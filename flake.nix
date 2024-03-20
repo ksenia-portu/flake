@@ -37,19 +37,19 @@
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
           inherit system; 
-          linuxHomeOverlay = (
+          llamaOverlay = (
             final: prev: {
-
-              llama-cpp-python = inputs.llama.llama-cpp-python; 
-              llama-cpp = inputs.llama.llama-cpp; 
-              #llama-cpp-python = inputs.llama.legacyPackages.${system}.llama-cpp-python; 
-              #llama-cpp = inputs.llama.legacyPackages.${system}.llama-cpp; 
+              llama-cpp-python = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp-python; 
+              llama-cpp = inputs.llama.llama-cpp-python.packages.${system}.llama-cpp; 
             });
-          overlays = [inputs.llama]; 
+          overlays = [llamaOverlay];
+          #overlays = [inputs.llama]; 
         };
 
       };
-      systems = [ "x86_64-linux"];
+      systems = [
+        "x86_64-linux"
+      ];
       debug = true;
       imports = [
         hercules-ci-effects.flakeModule

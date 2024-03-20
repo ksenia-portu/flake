@@ -31,13 +31,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { flake-parts, invokeai-src, hercules-ci-effects, llama, ... }@inputs:
+  outputs = { self, flake-parts, invokeai-src, hercules-ci-effects, llama, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       perSystem = { system, ... }: {
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
           inherit system;
           overlays = [
+            self.overlays.default
             #inputs.llama.overlays.default
           ];          
         };

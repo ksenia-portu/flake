@@ -59,7 +59,7 @@ python3Packages.buildPythonPackage {
   propagatedBuildInputs = with python3Packages; [
     #varname
     #thop
-    #pymeshlab
+    pymeshlab
     lark
     py-cpuinfo
     zhipuai

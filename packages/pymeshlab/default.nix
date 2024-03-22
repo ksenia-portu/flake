@@ -30,7 +30,7 @@ in
     '';
 
     propagatedBuildInputs = with python311Packages; [
-      #setuptools
+      setuptools
       numpy
     ];
 
@@ -58,7 +58,7 @@ in
       cmake
       ninja
       python311Packages.pythonRelaxDepsHook
-      #python311Packages.setuptools
+      python311Packages.setuptools
       glew
       eigen
       cgal
@@ -77,6 +77,6 @@ in
       libGLU qt5.qtbase gmp mpfr boost glew lib3ds eigen qhull
       xercesc
       muparser
-      #python311Packages.setuptools
+      python311Packages.setuptools
     ];
   }

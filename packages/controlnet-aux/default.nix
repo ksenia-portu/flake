@@ -10,6 +10,7 @@
 , einops
 , scikit-image
 , timm
+, importlib-metadata
 , pythonRelaxDepsHook
 }:
 
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     einops
     scikit-image
     timm
+    importlib-metadata
   ];
 
   nativeBuildInputs = [

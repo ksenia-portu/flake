@@ -11,7 +11,10 @@ python311Packages.buildPythonPackage rec {
   };
 
   # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = [  python311Packages.setuptools ];
+  propagatedBuildInputs = with python311Packages; [
+    requests
+    setuptools 
+  ];
   src = src_repo;  # Adjust the path to your desired subdirectory
 
   meta = with lib; {
@@ -19,3 +22,7 @@ python311Packages.buildPythonPackage rec {
     license = licenses.mit;
   };
 } 
+
+
+
+

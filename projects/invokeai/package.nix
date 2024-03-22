@@ -3,7 +3,7 @@
 , lib
 , src
 , pkgs
-#, pkgs'
+, inputs
 # extra deps
 }:
 
@@ -14,24 +14,21 @@ let
     builtins.head
   ];
   essentials = with pkgs; [
-    #binutils
-    #clblast
-    #opencl-headers    
-    openblas
-    llama-cpp
-    gperftools 
-    dlib
-    ffmpeg
-    #gcc
-    gcc13
-    git
-    glib
-    glibc
-    gmp
-    libsForQt5.full
-    libcxx
-    libffi
-    libffi.dev
+    inputs.llama.packages.${pkgs.system}.llama-cpp
+    #llama-cpp    
+            gperftools 
+            dlib
+            ffmpeg
+            #gcc
+            gcc13
+            git
+            glib
+            glibc
+            gmp
+            libsForQt5.full
+            libcxx
+            libffi
+            libffi.dev
             libGL
             libGLU
             stdenv.cc
@@ -55,14 +52,19 @@ python3Packages.buildPythonPackage {
   format = "pyproject";
   version = getVersion src;
   inherit src;
+  nativeBuildInputs = with python3Packages; [ 
+    inputs.llama.packages.${pkgs.system}.llama-cpp-python    
+    #inputs.ultra.packages.${pkgs.system}.ultralytics
+      pythonRelaxDepsHook pip]; 
   propagatedBuildInputs = with python3Packages; [
-    #llama-cpp-python
-    typing-extensions
-    kiui
-    hub-sdk
-    ultralytics
-    zhipuai
+    #varname
+    #thop
     #pymeshlab
+    lark
+    py-cpuinfo
+    zhipuai
+    #kiui
+    importlib-metadata
     segment_anything
     deepdiff
     diskcache
@@ -82,6 +84,8 @@ python3Packages.buildPythonPackage {
     simpleeval
     trimesh
     wrapt
+    #segment_anything.packages.${system}.segment_anything
+    hub-sdk
     #ultralytics
     pyopenssl
     watchdog
@@ -92,7 +96,6 @@ python3Packages.buildPythonPackage {
     gradio-client
     pygit2
 
-    py-cpuinfo
     semver
     mediapipe
     numpy
@@ -100,10 +103,10 @@ python3Packages.buildPythonPackage {
     uvicorn
     pyperclip
     invisible-watermark
-    fastapi
-    fastapi-events
-    fastapi-socketio
-    timm
+    #fastapi
+    #fastapi-events
+    #fastapi-socketio
+    #timm
     scikit-image
     controlnet-aux
     compel
@@ -139,7 +142,7 @@ python3Packages.buildPythonPackage {
     send2trash
     flask
     flask-cors
-    dependency-injector
+    #dependency-injector
     gfpgan
     eventlet
     clipseg
@@ -155,7 +158,6 @@ python3Packages.buildPythonPackage {
     onnx
     onnxruntime
   ];
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook pip ];
   pythonRemoveDeps = [ "clip" "pyreadline3" "flaskwebgui" "opencv-python" "fastapi-socketio" ];
   pythonRelaxDeps = [ "dnspython" "flask" "requests" "numpy" "pytorch-lightning" "torchsde" "uvicorn" "invisible-watermark" "accelerate" "scikit-image" "safetensors" "huggingface-hub" "torchvision" "test-tube" "fastapi" ];
   makeWrapperArgs = [

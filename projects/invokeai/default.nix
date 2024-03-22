@@ -10,25 +10,27 @@ in
     commonOverlays = [
       overlays.python-fixPackages
       (l.overlays.callManyPackages [
-        #../../packages/llama-cpp-python
-        ../../packages/timm
-        ../../packages/zhipuai
-        ../../packages/kiui
         ../../packages/hub-sdk
-        #../../packages/pymeshlab
-        ../../packages/ultralytics
+        #../../packages/varname
+        ../../packages/pymeshlab
+        #../../packages/thop
+        ../../packages/objprint
+        #../../packages/kiui
+        ../../packages/zhipuai
+        ../../packages/timm
+        #../../packages/ultralytics
         ../../packages/plyfile
         ../../packages/segment_anything
         ../../packages/lpips
         ../../packages/mediapipe
-        ../../packages/safetensors
+        #../../packages/safetensors
         ../../packages/easing-functions
         ../../packages/dynamicprompts
         ../../packages/controlnet-aux
-        ../../packages/fastapi
-        ../../packages/fastapi-events
-        ../../packages/fastapi-socketio
-        ../../packages/starlette
+        #../../packages/fastapi
+        #../../packages/fastapi-events
+        #../../packages/fastapi-socketio
+        #../../packages/starlette
         ../../packages/pytorch-lightning
         ../../packages/compel
         ../../packages/taming-transformers-rom1504
@@ -92,7 +94,7 @@ in
 
     src = inputs.invokeai-src;
 
-    mkInvokeAIVariant = args: pkgs.callPackage ./package.nix ({ inherit src; } // args);
+    mkInvokeAIVariant = args: pkgs.callPackage ./package.nix ({ inherit src inputs ; } // args);
   in {
     packages = {
       invokeai-amd = mkInvokeAIVariant {

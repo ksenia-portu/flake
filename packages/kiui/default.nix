@@ -1,4 +1,9 @@
-{ lib, python311Packages, fetchFromGitHub, fetchgit }: 
+{ lib
+, python311Packages
+, varname
+, objprint
+, fetchFromGitHub
+, fetchgit }: 
 
 python311Packages.buildPythonPackage rec {
   pname = "kiui";
@@ -11,7 +16,13 @@ python311Packages.buildPythonPackage rec {
   };
 
   # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = [  python311Packages.setuptools ];
+  #propagatedBuildInputs = with python311Packages; [
+  nativeBuildInputs = with python311Packages; [
+    lazy-loader
+    varname
+    objprint
+    setuptools 
+  ];
   src = src_repo;  # Adjust the path to your desired subdirectory
 
   meta = with lib; {

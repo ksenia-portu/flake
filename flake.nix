@@ -14,38 +14,30 @@
       url = "github:invoke-ai/InvokeAI/v3.3.0post3";
       flake = false;
     };
-    textgen-src = {
-      url = "github:oobabooga/text-generation-webui/v1.7";
-      flake = false;
-    };
     llama = {
       url = "github:ksenia-portu/llama-cpp-python-flake";
       flake = true;
     };
+    ultra = {
+      url = "github:Alan01252/ultralytics-nix-flake";
+      flake = true;
+    };    
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    hercules-ci-effects = {
-      url = "github:hercules-ci/hercules-ci-effects";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
-  outputs = { self, flake-parts, invokeai-src, hercules-ci-effects, llama, ... }@inputs:
+  outputs = { self, flake-parts, invokeai-src, hercules-ci-effects, llama, ultra, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       perSystem = { config, system, ... }: {
         _module.args.pkgs = import inputs.nixpkgs { 
           config.allowUnfree = true; 
           inherit system;
-          #overlays = [ config.overlays.default];          
         };
-        #overlayAttrs = {
-        #  llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
-        #  llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
-        #};       
         packages = {        
           llama-cpp        = inputs.llama.packages.${system}.llama-cpp; 
           llama-cpp-python = inputs.llama.packages.${system}.llama-cpp-python; 
+          #ultralytics      = inputs.ultra.packages.${system}.ultralytics;
         };
         overlayAttrs = config.packages;
       };
@@ -58,7 +50,7 @@
         ./projects/invokeai
         ./projects/textgen
         ./website
-        inputs.flake-parts.flakeModules.easyOverlay #llama
+        inputs.flake-parts.flakeModules.easyOverlay #for llama
       ];
     };
 }

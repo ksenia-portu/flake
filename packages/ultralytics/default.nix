@@ -1,59 +1,66 @@
 { lib
-, python3Packages
-, scipy
-, setuptools
-, requests
-, hub-sdk
-, opencv-python
-, opencv
-, thop
+, buildPythonPackage 
 , fetchFromGitHub
-, fetchgit 
-}: 
+, setuptools
+, matplotlib
+, opencv-python # https://pypi.org/project/opencv-python/
+, pillow
+, pyyaml
+, requests
+, scipy
+, torch
+, torchvision
+, tqdm
+, psutil
+, py-cpuinfo
+, thop
+, pandas
+, seaborn
+, hub-sdk
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage {
   pname = "ultralytics";
   version = "v8.1.0";
-  format="pyproject";
-  src_repo = fetchgit {
-    url = "https://github.com/ultralytics/ultralytics.git";
-    rev = "808984c6cf32f4ac9cb28f52fd74d13b9d6ad6a0";  # Specify the specific commit, tag, or branch
-    sha256 = "sha256-nrvOos1Xx2Kb4iULAPN0/6GaVvrRdx0mLF7vAebjBQk=";  # SHA256 hash of the source
+
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "ultralytics";
+    repo = "ultralytics";
+    rev = "808984c6cf32f4ac9cb28f52fd74d13b9d6ad6a0";
+    hash = "sha256-nrvOos1Xx2Kb4iULAPN0/6GaVvrRdx0mLF7vAebjBQk=";
   };
 
-  # buildInputs for build and runtime dependencies, stuff you need to build the package and to run it.
-  buildInputs = [
-    opencv
-  #  thop
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    matplotlib
+    opencv-python # https://pypi.org/project/opencv-python/
+    pillow
+    pyyaml
+    requests
+    scipy
+    torch
+    torchvision
+    tqdm
+    psutil
+    py-cpuinfo
+    thop
+    pandas
+    seaborn
+    hub-sdk
   ];
 
   postPatch = ''    
     substituteInPlace pyproject.toml --replace "opencv-python" "opencv"
   '';
 
-  # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = with python3Packages; [
-    scipy
-    setuptools
-    requests
-    torch
-    torchvision
-    tqdm 
-    psutil 
-    py-cpuinfo 
-    thop 
-    pandas 
-    seaborn 
-    hub-sdk 
-    #opencv-python
-    opencv
-    thop
-  ];
-  src = src_repo;  # Adjust the path to your desired subdirectory
 
   meta = with lib; {
     description = "Description of your package";
     license = licenses.mit;
   };
-} 
-
+}

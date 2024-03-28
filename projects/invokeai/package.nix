@@ -61,7 +61,7 @@ python3Packages.buildPythonPackage {
   propagatedBuildInputs = with python3Packages; [
     #varname
     #thop
-    #diff-gaussian-rasterization
+    diff-gaussian-rasterization
     typeguard
     torchtyping
     pytorch-msssim

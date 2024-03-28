@@ -1,19 +1,23 @@
-{ lib, python3Packages, fetchFromGitHub, fetchgit }: 
+{ lib
+, python3Packages
+, typeguard
+, fetchFromGitHub, fetchgit }: 
 
 python3Packages.buildPythonPackage rec {
-  pname = "hub-sdk";
-  version = "v0.0.2";
+  pname = "torchtyping";
+  version = "0.1.4";
   format="pyproject";
   src_repo = fetchgit {
-    url = "https://github.com/ultralytics/hub-sdk.git";
-    rev = "862df4b9ef865a9db13c8396d345525466555c55";  # Specify the specific commit, tag, or branch
-    sha256 = "sha256-nUw+9wNqgxwDqvdcZYDGqGVGZcgnRwXHU6FXFxrkYSc=";  # SHA256 hash of the source
+    url = "https://github.com/patrick-kidger/torchtyping.git";
+    rev = "1f3749c5b5617ec6b6449e98ad9ae3fb6645ef54";  # Specify the specific commit, tag, or branch
+    sha256 = "sha256-URhTRExWGajRg3AoBPZtNoAtgbt33xzTyYw/aPRIfM4="; # SHA256 hash of the source
   };
 
   # Extract the specific subdirectory within the repository
   propagatedBuildInputs = with python3Packages; [
-    requests
     setuptools 
+    typeguard
+    torch
   ];
   src = src_repo;  # Adjust the path to your desired subdirectory
 
@@ -22,7 +26,3 @@ python3Packages.buildPythonPackage rec {
     license = licenses.mit;
   };
 } 
-
-
-
-

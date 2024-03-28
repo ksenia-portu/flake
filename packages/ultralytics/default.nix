@@ -1,16 +1,17 @@
 { lib
-, python311Packages
+, python3Packages
 , scipy
 , setuptools
 , requests
 , hub-sdk
 , opencv-python
+, opencv
 , thop
 , fetchFromGitHub
 , fetchgit 
 }: 
 
-python311Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "ultralytics";
   version = "v8.1.0";
   format="pyproject";
@@ -20,15 +21,18 @@ python311Packages.buildPythonPackage rec {
     sha256 = "sha256-nrvOos1Xx2Kb4iULAPN0/6GaVvrRdx0mLF7vAebjBQk=";  # SHA256 hash of the source
   };
 
-
   # buildInputs for build and runtime dependencies, stuff you need to build the package and to run it.
   buildInputs = [
-    opencv-python
-    thop
+    opencv
+  #  thop
   ];
-  
+
+  postPatch = ''    
+    substituteInPlace pyproject.toml --replace "opencv-python" "opencv"
+  '';
+
   # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     scipy
     setuptools
     requests
@@ -41,8 +45,9 @@ python311Packages.buildPythonPackage rec {
     pandas 
     seaborn 
     hub-sdk 
-    opencv-python
-    #htop
+    #opencv-python
+    opencv
+    thop
   ];
   src = src_repo;  # Adjust the path to your desired subdirectory
 

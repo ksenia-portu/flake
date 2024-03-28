@@ -1,6 +1,6 @@
-{ lib, python311Packages, fetchFromGitHub, fetchgit }: 
+{ lib, python3Packages, fetchFromGitHub, fetchgit }: 
 
-python311Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "zhipuai";
   version = "0.0.0";
   format="pyproject";
@@ -11,7 +11,7 @@ python311Packages.buildPythonPackage rec {
   };
 
   # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     #python3Packages; [  
     setuptools 
     httpx

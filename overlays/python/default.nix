@@ -42,7 +42,9 @@ lib: {
       };
     in final.toPythonModule (relaxProtobuf streamlit);
     opencv-python-headless = final.opencv-python;
-    opencv-python = final.opencv4;
+    opencv-python = final.opencv4.override {
+              enableFfmpeg = true;
+            };
   };
 
   torchRocm = final: prev: {

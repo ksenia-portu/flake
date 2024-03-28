@@ -1,8 +1,8 @@
 { lib, pkgs, pythonPackages, executing, setuptools-scm }:
 
 pythonPackages.buildPythonPackage rec {
-    pname = "varname";
-    version = "0.8.1";
+    pname = "thop";
+    version = "0.1.1.post2209072238";
     name = "${pname}-${version}";
 
     src = pythonPackages.fetchPypi {
@@ -17,8 +17,4 @@ pythonPackages.buildPythonPackage rec {
 
     doCheck = false;
 
-    meta = with lib; {
-      homepage = https://github.com/pwwang/python-varname;
-      description = "Dark magics about variable names in python.";
-    };
 }

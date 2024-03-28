@@ -11,14 +11,21 @@ in
       overlays.python-fixPackages
       (l.overlays.callManyPackages [
         ../../packages/hub-sdk
-        #../../packages/varname
+        ../../packages/torchtyping
+        ../../packages/diff-gaussian-rasterization
+        #../../packages/typeguard
+        #../../packages/opencv-python-headless
+        ../../packages/rembg
+        ../../packages/evalidate
+        ../../packages/color-matcher
+        ../../packages/varname
         ../../packages/pymeshlab
-        #../../packages/thop
+        ../../packages/thop
         ../../packages/objprint
-        #../../packages/kiui
+        ../../packages/kiui
         ../../packages/zhipuai
         ../../packages/timm
-        #../../packages/ultralytics
+        ../../packages/ultralytics
         ../../packages/plyfile
         ../../packages/segment_anything
         ../../packages/lpips
@@ -85,7 +92,6 @@ in
         );
       nvidia = 
         l.overlays.applyOverlays 
-        #pkgs' 
         pkgs.python3Packages 
         (commonOverlays ++ [
         overlays.python-torchCuda

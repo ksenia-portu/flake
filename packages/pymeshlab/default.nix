@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
-  python311Packages,
+  python3Packages,
+  wheel,
   fetchFromGitHub,
   pkgs,
   ...
@@ -29,7 +30,7 @@ in
       substituteInPlace "setup.py" --replace "'numpy'" ""
     '';
 
-    propagatedBuildInputs = with python311Packages; [
+    propagatedBuildInputs = with python3Packages; [
       setuptools
       numpy
     ];
@@ -40,9 +41,13 @@ in
     '';
 
     buildPhase = ''
+      echo "buildPhase 1"
       ninja
+      echo "buildPhase 2"
       ninja install
-      ${python311Packages.pip}/bin/pip wheel .. -w wheels/
+      echo "buildPhase 3"
+      ${python3Packages.pip}/bin/pip wheel .. -w wheels/
+      echo "buildPhase 4"
     '';
 
     format = "other";
@@ -50,15 +55,21 @@ in
     pythonImportsCheck = ["pymeshlab"];
 
     installPhase = ''
+      echo "installPhase1"
       mkdir $out
-      ${python311Packages.pip}/bin/pip install ./wheels/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags
+      echo "installPhase2"
+      echo ${python3Packages.pip}
+      echo ${python3Packages.pip}/bin/pip
+      ${python3Packages.pip}/bin/pip install ./wheels/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags
+      echo "installPhase3"
     '';
 
     nativeBuildInputs = with pkgs; [
       cmake
       ninja
-      python311Packages.pythonRelaxDepsHook
-      python311Packages.setuptools
+      python3Packages.pythonRelaxDepsHook
+      python3Packages.setuptools
+      python3Packages.wheel
       glew
       eigen
       cgal
@@ -77,6 +88,7 @@ in
       libGLU qt5.qtbase gmp mpfr boost glew lib3ds eigen qhull
       xercesc
       muparser
-      python311Packages.setuptools
+      python3Packages.setuptools
+      python3Packages.wheel
     ];
   }

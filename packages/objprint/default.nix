@@ -1,6 +1,9 @@
-{ lib, python311Packages, fetchFromGitHub, fetchgit }: 
+{ lib
+, buildPythonPackage
+, setuptools 
+, fetchFromGitHub, fetchgit }: 
 
-python311Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "objprint";
   version = "0.2.3";
   format="pyproject";
@@ -11,7 +14,9 @@ python311Packages.buildPythonPackage rec {
   };
 
   # Extract the specific subdirectory within the repository
-  propagatedBuildInputs = [  python311Packages.setuptools ];
+  propagatedBuildInputs = [  
+    setuptools 
+  ];
   src = src_repo;  # Adjust the path to your desired subdirectory
 
   meta = with lib; {

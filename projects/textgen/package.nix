@@ -81,7 +81,7 @@ let
     colorama
     datasets
     flexgen
-    gradio
+    #gradio
     llama-cpp-python
     markdown
     numpy

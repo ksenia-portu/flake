@@ -15,12 +15,12 @@ let
   ];
   essentials = with pkgs; [
     inputs.llama.packages.${pkgs.system}.llama-cpp
-    #llama-cpp    
-            gperftools 
-            dlib
-            ffmpeg
-            #gcc
-            gcc13
+    #llama-cpp   
+    cudaPackages.cuda_nvrtc 
+    gperftools 
+    dlib
+    ffmpeg
+    gcc
             git
             glib
             glibc
@@ -36,7 +36,7 @@ let
             zlib
             zlib.dev
             zsh
-            #python311Packages.pyqt5
+            python3Packages.pyqt5
           ];
   cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
   #nvidialib = "${pkgs.linuxPackages.nvidiaPackages.stable}/lib";
@@ -44,6 +44,7 @@ let
   libpath = pkgs.lib.makeLibraryPath essentials; 
   LD_LIBRARY_PATH="${cclib}:${opengllib}:${libpath}";
   CUDA_PATH = pkgs.cudatoolkit;
+  CUDA_HOME = pkgs.cudatoolkit;
   EXTRA_LDFLAGS = "-L${pkgs.linuxPackages.nvidia_x11}/lib";
 in
 
@@ -55,19 +56,31 @@ python3Packages.buildPythonPackage {
   nativeBuildInputs = with python3Packages; [ 
     inputs.llama.packages.${pkgs.system}.llama-cpp-python    
     #inputs.ultra.packages.${pkgs.system}.ultralytics
-      pythonRelaxDepsHook pip]; 
+    pythonRelaxDepsHook pip
+  ]; 
   propagatedBuildInputs = with python3Packages; [
     #varname
     #thop
+    #diff-gaussian-rasterization
+    typeguard
+    torchtyping
+    pytorch-msssim
     pymeshlab
+    bitsandbytes
+    evalidate
+    rembg
+    voluptuous
+    open-clip-torch
+    huggingface-hub
+    color-matcher
     lark
     py-cpuinfo
     zhipuai
-    #kiui
+    kiui
     importlib-metadata
     segment_anything
     deepdiff
-    diskcache
+    #diskcache
     insightface
     lpips
     moviepy
@@ -84,16 +97,15 @@ python3Packages.buildPythonPackage {
     simpleeval
     trimesh
     wrapt
-    #segment_anything.packages.${system}.segment_anything
     hub-sdk
-    #ultralytics
+    ultralytics
     pyopenssl
     watchdog
     gdown
     xformers
     huggingface-hub
-    gradio
-    gradio-client
+    #gradio
+    #gradio-client
     pygit2
 
     semver
@@ -192,6 +204,7 @@ python3Packages.buildPythonPackage {
   shellHook = ''
     echo "Entering dev shell"
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+    export CUDA_HOME=${CUDA_HOME}
     export TCMALLOC="" 
     export EXTRA_LDFLAGS=""
     #echo  $LD_LIBRARY_PATH

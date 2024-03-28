@@ -1,15 +1,16 @@
 { lib, pkgs, pythonPackages, executing, setuptools-scm }:
 
 pythonPackages.buildPythonPackage rec {
-    pname = "varname";
-    version = "0.8.1";
+    pname = "torchtyping";
+    version = "0.1.4";
     name = "${pname}-${version}";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "06f8fa6e7db0a9897ada5e096eab95f9c2e3811e69e7a29f747517e4377f3d2b";
+      sha256 = "sha256-R2M3XRd1JkG9G/8Pqt2t4pvjwSX8pjVePO53AOl1/bU=";
     };
 
+    
     propagatedBuildInputs = with pythonPackages; [
       setuptools-scm
       executing

@@ -20,7 +20,8 @@ let
     gperftools 
     dlib
     ffmpeg
-    gcc
+    gcc12
+    glm
             git
             glib
             glibc
@@ -29,6 +30,7 @@ let
             libcxx
             libffi
             libffi.dev
+            libgcc
             libGL
             libGLU
             stdenv.cc
@@ -62,7 +64,12 @@ python3Packages.buildPythonPackage {
     #varname
     #thop
     diff-gaussian-rasterization
+    #mamba-ssm
+    #causal-conv1d
+    aiofiles
     typeguard
+    tiktoken
+    token-count
     torchtyping
     pytorch-msssim
     pymeshlab

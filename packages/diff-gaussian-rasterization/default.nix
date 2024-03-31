@@ -31,16 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
   };
 
-  
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
-    setuptools
-    cuda_nvtx
-    cmake
-    #cxx
-    stdenv.cc
-    #gcc12
-    cuda_nvcc
+  buildInputs = with cudaPackages; [
     cuda_cudart
     cuda_cupti
     cuda_nvrtc
@@ -51,6 +42,15 @@ buildPythonPackage rec {
     libcusolver
     libcusparse
     nccl
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
+    setuptools
+    cuda_nvtx
+    cmake
+    stdenv.cc
+    cuda_nvcc
     which
     ninja
   ]);

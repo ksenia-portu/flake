@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, buildPackages
 , fetchFromGitHub
 , cmake
 , gcc12
@@ -20,7 +21,8 @@
 buildPythonPackage rec {
   pname = "diff-gaussian-rasterization";
   version = "0.0.0";
-  pyproject = true;
+  #pyproject = true;
+  #format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "graphdeco-inria";
@@ -29,20 +31,15 @@ buildPythonPackage rec {
     hash = "sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
   };
 
-  #BUILD_CUDA_EXT = "1";
-  #TORCH_CUDA_ARCH_LIST="6.1+PTX";
-  CUDA_HOME = cudaPackages.cudatoolkit;
-  CUDA_VERSION = cudaPackages.cudaVersion;
-  cxx = if stdenv.isLinux then gcc12 else clang;
-  #CUDAHOSTCXX=cudaPackages.cudatoolkit.cc/bin/c++;
-  #CUDAHOSTCXX = lib.optionalString cudaSupport "${stdenv.cc}/bin/cc";
-
+  
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
     setuptools
     cuda_nvtx
     cmake
-    cxx
-    gcc12
+    #cxx
+    stdenv.cc
+    #gcc12
     cuda_nvcc
     cuda_cudart
     cuda_cupti
@@ -57,34 +54,15 @@ buildPythonPackage rec {
     which
     ninja
   ]);
-  buildInputs = [git cacert];
-  preBuild = ''
-    echo "CUDA_HOME"
-    echo $CUDA_HOME
-  '';
 
   propagatedBuildInputs = [
+    setuptools
     torch
-    ninja
-    cmake
   ];
-  cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
-  ];
-  # //export CMAKE_CXX_COMPILER=${clang}/bin/clang++
-  #//export CUDAHOSTCXX=${cudaPackages.cudatoolkit.cc}/bin/c++
-  configurePhase = ''
-      mkdir build && cd build
-      cmake ..  "-GNinja" "-DDCMAKE_INSTALL_PREFIX=./diff-gaussian-rasterization"  "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-    '';
   
   meta = with lib; {
     description = "Description of your package";
     license = licenses.mit;
   };
-  shellHook = ''
-    export CMAKE_C_COMPILER=gcc12
-    export CUDAHOSTCXX=${cudaPackages.cudatoolkit.cc}/bin/c++ 
-  '';  
 }
 

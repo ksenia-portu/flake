@@ -4,6 +4,7 @@
 , src
 , pkgs
 , inputs
+, addDriverRunpath
 # extra deps
 }:
 
@@ -15,7 +16,9 @@ let
   ];
   essentials = with pkgs; [
     inputs.llama.packages.${pkgs.system}.llama-cpp
-    #llama-cpp   
+    #llama-cpp 
+    #dcgm 
+    autogen 
     cudaPackages.cuda_nvrtc 
     gperftools 
     dlib
@@ -43,8 +46,9 @@ let
   cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
   #nvidialib = "${pkgs.linuxPackages.nvidiaPackages.stable}/lib";
   opengllib = "/run/opengl-driver/lib";
+  opengllib2 = "${addDriverRunpath.driverLink}/lib";
   libpath = pkgs.lib.makeLibraryPath essentials; 
-  LD_LIBRARY_PATH="${cclib}:${opengllib}:${libpath}";
+  LD_LIBRARY_PATH="${cclib}:${opengllib}:${opengllib2}:${libpath}";
   CUDA_PATH = pkgs.cudatoolkit;
   CUDA_HOME = pkgs.cudatoolkit;
   EXTRA_LDFLAGS = "-L${pkgs.linuxPackages.nvidia_x11}/lib";
@@ -61,11 +65,22 @@ python3Packages.buildPythonPackage {
     pythonRelaxDepsHook pip
   ]; 
   propagatedBuildInputs = with python3Packages; [
+    rich
+    librosa
+    deforum
+    loguru
+    nltk
+    pydash
+    sortedcontainers
     #varname
     #thop
-    diff-gaussian-rasterization
+    #diff-gaussian-rasterization
+    #gaussian-splatting
     #mamba-ssm
     #causal-conv1d
+    python-multipart
+    autogen
+    flaml
     aiofiles
     typeguard
     tiktoken
@@ -111,8 +126,8 @@ python3Packages.buildPythonPackage {
     gdown
     xformers
     huggingface-hub
-    #gradio
-    #gradio-client
+    gradio
+    gradio-client
     pygit2
 
     semver

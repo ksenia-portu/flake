@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
+, toPythonModule
 , buildPackages
 , fetchFromGitHub
 , cmake
+, glm
 , gcc12
 , clang
 , cacert
@@ -18,10 +20,11 @@
 , fetchgit
 }:
 
+#toPythonModule (stdenv.mkDerivation rec {
 buildPythonPackage rec {
   pname = "diff-gaussian-rasterization";
   version = "0.0.0";
-  #pyproject = true;
+  pyproject = true;
   #format = "pyproject";
 
   src = fetchFromGitHub {
@@ -30,7 +33,7 @@ buildPythonPackage rec {
     rev = "59f5f77e3ddbac3ed9db93ec2cfe99ed6c5d121d";
     hash = "sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
   };
-
+  #dontUseCmakeConfigure = true;
   buildInputs = with cudaPackages; [
     cuda_cudart
     cuda_cupti
@@ -42,7 +45,9 @@ buildPythonPackage rec {
     libcusolver
     libcusparse
     nccl
+    glm
   ];
+  postInstall=''cd $src'';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
@@ -65,4 +70,4 @@ buildPythonPackage rec {
     license = licenses.mit;
   };
 }
-
+#)

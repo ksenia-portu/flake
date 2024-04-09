@@ -14,6 +14,10 @@ in
         ../../packages/torchtyping
         ../../packages/diff-gaussian-rasterization
         ../../packages/mamba-ssm
+        ../../packages/autogen
+        ../../packages/flaml
+        ../../packages/deforum
+        ../../packages/gaussian-splatting
         #../../packages/typeguard
         ../../packages/token-count
         ../../packages/causal-conv1d
@@ -54,7 +58,6 @@ in
         ../../packages/clipseg
         #../../packages/kornia
         ../../packages/picklescan
-        #../../packages/diffusers
         ../../packages/pypatchmatch
         ../../packages/torch-fidelity
         ../../packages/resize-right

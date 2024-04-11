@@ -16,6 +16,7 @@ in
         ../../packages/mamba-ssm
         ../../packages/autogen
         ../../packages/flaml
+        ../../packages/colour-science
         ../../packages/deforum
         #../../packages/diffusers_old
         ../../packages/gaussian-splatting

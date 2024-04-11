@@ -67,6 +67,7 @@ python3Packages.buildPythonPackage {
     pythonRelaxDepsHook pip
   ]; 
   propagatedBuildInputs = with python3Packages; [
+    colour-science
     deep-translator
     argostranslate
     rich
@@ -78,7 +79,7 @@ python3Packages.buildPythonPackage {
     sortedcontainers
     #varname
     #thop
-    #diff-gaussian-rasterization
+    diff-gaussian-rasterization
     #gaussian-splatting
     #mamba-ssm
     #causal-conv1d

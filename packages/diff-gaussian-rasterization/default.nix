@@ -21,7 +21,9 @@
 , fetchgit
 }:
 
-buildPythonPackage rec {
+
+#buildPythonPackage rec {
+toPythonModule (gcc12Stdenv.mkDerivation rec {  
   pname = "diff-gaussian-rasterization";
   version = "0.0.0";
   pyproject = true;
@@ -34,11 +36,12 @@ buildPythonPackage rec {
     hash = "sha256-VosVYSjhXCXy3xCrwmumPgyY6baVk6wXAZXk+tP1LD0=";
 #"sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
   };
-  #TORCH_CUDA_ARCH_LIST="6.1+PTX"; 
-  TORCH_CUDA_ARCH_LIST = "6.0 6.1 6.1+PTX 7.2+PTX 7.5+PTX"; 
+  TORCH_CUDA_ARCH_LIST="6.1+PTX"; 
+  #TORCH_CUDA_ARCH_LIST = "6.0 6.1 6.1+PTX 7.2+PTX 7.5+PTX"; 
   BUILD_CUDA_EXT = "1"; 
-  CUDA_HOME = cudaPackages.cudatoolkit;
-  CUDA_VERSION = cudaPackages.cudaVersion;
+  CUDA_HOME        = cudaPackages.cudatoolkit;
+  CUDA_VERSION     = cudaPackages.cudaVersion;
+  CUDAToolkit_ROOT = cudaPackages.cudatoolkit;
 
   buildInputs = lib.optionals gcc12Stdenv.isLinux (with cudaPackages; [
     cuda_nvtx
@@ -53,20 +56,27 @@ buildPythonPackage rec {
     libcusparse
     nccl
     which
-    ninja
+    cmake
+    #ninja
   ]);
-  
+
+  #preBuild = ''
+  #  cd build
+  #  substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
+  #'';
+
   propagatedBuildInputs = [
     setuptools
     torch
-    ninja
+    #ninja
     which
 
    ];
  
   nativeBuildInputs = [
-    which
-    ninja
+    #which
+    #cmake
+    #ninja
     #rocmPackages.clr
   ];
    
@@ -75,4 +85,4 @@ buildPythonPackage rec {
     license = licenses.mit;
   };
 }
-#)
+)

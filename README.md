@@ -1,4 +1,4 @@
-## Nix for ComfyUI wit plugins
+## Nix for ComfyUI with plugins
 
 ## Fork from
 

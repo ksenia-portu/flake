@@ -2,7 +2,8 @@
 , buildPythonPackage
 , pkg-config
 , fetchPypi
-, stdenv
+#, stdenv
+, gcc12Stdenv
 , fetchzip
 , setuptools
 , writeText
@@ -45,7 +46,7 @@ let
       cp -r $out/lib/pkgconfig/opencv4.pc $out/lib/pkgconfig/opencv.pc
     '';
   };
-  libpatchmatch = stdenv.mkDerivation {
+  libpatchmatch = gcc12Stdenv.mkDerivation {
     name = "libpatchmatch";
     sourceRoot = ["source/patchmatch"];
     nativeBuildInputs = [

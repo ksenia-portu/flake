@@ -4,7 +4,6 @@
 
 { addict
 , basicsr
-, stdenv
 , future
 , gdown
 , lib
@@ -83,7 +82,7 @@ let
       };
     };
 in
-stdenv.mkDerivation rec {
+gcc12Stdenv.mkDerivation rec {
   pname = "codeformer";
   version = "0.1.2";
 

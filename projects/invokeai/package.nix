@@ -18,37 +18,39 @@ let
     inputs.llama.packages.${pkgs.system}.llama-cpp
     #llama-cpp 
     #dcgm 
-    autogen 
-    cudaPackages.cuda_nvrtc 
+    autogen
+    rocmPackages.rocm-runtime 
+    cudaPackages.cuda_nvrtc
+    cudaPackages.cudnn
     gperftools 
     dlib
     ffmpeg
     gcc12
     glm
-            git
-            glib
-            glibc
-            gmp
-            libsForQt5.full
-            libcxx
-            libffi
-            libffi.dev
-            libgcc
-            libGL
-            libGLU
-            stdenv.cc
-            stdenv.cc.cc
-            zlib
-            zlib.dev
-            zsh
-            python3Packages.pyqt5
+    git
+    glib
+    glibc
+    gmp
+    libsForQt5.full
+    libcxx
+    libffi
+    libffi.dev
+    #libgcc
+    libGL
+    libGLU
+    #stdenv.cc
+    #stdenv.cc.cc
+    zlib
+    zlib.dev
+    zsh
+    #python3Packages.pyqt5
           ];
-  cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
+  #cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
   #nvidialib = "${pkgs.linuxPackages.nvidiaPackages.stable}/lib";
   opengllib = "/run/opengl-driver/lib";
   opengllib2 = "${addDriverRunpath.driverLink}/lib";
   libpath = pkgs.lib.makeLibraryPath essentials; 
-  LD_LIBRARY_PATH="${cclib}:${opengllib}:${opengllib2}:${libpath}";
+  LD_LIBRARY_PATH="${opengllib}:${opengllib2}:${libpath}";
   CUDA_PATH = pkgs.cudatoolkit;
   CUDA_HOME = pkgs.cudatoolkit;
   EXTRA_LDFLAGS = "-L${pkgs.linuxPackages.nvidia_x11}/lib";
@@ -65,6 +67,8 @@ python3Packages.buildPythonPackage {
     pythonRelaxDepsHook pip
   ]; 
   propagatedBuildInputs = with python3Packages; [
+    deep-translator
+    argostranslate
     rich
     librosa
     deforum
@@ -169,7 +173,7 @@ python3Packages.buildPythonPackage {
     kornia
     k-diffusion
     picklescan
-    diffusers
+    #diffusers
     pypatchmatch
     realesrgan
     pillow
@@ -240,8 +244,8 @@ python3Packages.buildPythonPackage {
       --replace 'pip~=22.3' 'pip'
 
     # Add subprocess to the imports
-    substituteInPlace ./invokeai/backend/install/invokeai_configure.py --replace \
-        'import shutil' \
+    #substituteInPlace ./invokeai/backend/install/invokeai_configure.py --replace \
+    #    'import shutil' \
 '
 import shutil
 import subprocess
@@ -249,9 +253,9 @@ import subprocess
     # shutil.copytree will inherit the permissions of files in the /nix/store
     # which are read only, so we subprocess.call cp instead and tell it not to
     # preserve the mode
-    substituteInPlace ./invokeai/backend/install/invokeai_configure.py --replace \
-      "shutil.copytree(configs_src, configs_dest, dirs_exist_ok=True)" \
-      "subprocess.call('cp -r --no-preserve=mode {configs_src} {configs_dest}'.format(configs_src=configs_src, configs_dest=configs_dest), shell=True)"
+    #substituteInPlace ./invokeai/backend/install/invokeai_configure.py --replace \
+    #  "shutil.copytree(configs_src, configs_dest, dirs_exist_ok=True)" \
+    #  "subprocess.call('cp -r --no-preserve=mode {configs_src} {configs_dest}'.format(configs_src=configs_src, configs_dest=configs_dest), shell=True)"
     runHook postPatch
 
     substituteInPlace ./pyproject.toml \

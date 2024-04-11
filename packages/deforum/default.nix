@@ -1,40 +1,28 @@
-{ buildPythonPackage, fetchPypi, lib
-, fetchFromGitHub
-, diffusers
-, pydantic_1
-}:
-let
-  diffusers_old = diffusers.overrideAttrs (old: {
-    src = fetchFromGitHub {
-      owner = "huggingface";
-      repo = "diffusers";
-      rev = "refs/tags/v0.18.1";
-      hash = "sha256-9r/1vW7Rhv9+Swxdzu5PTnlQlT8ofJeZamHf5X4ql8w=";
-    };
-  });
+{ lib
+, buildPythonPackage
+, setuptools 
+, fetchFromGitHub, fetchgit }: 
 
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "deforum";
-  version = "0.1.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-vLwkSVj9gD6oDOeybQ4tTwcwey4mWuXYCjw9qFoaFsA=";
+  version = "0.0.0";
+  format="pyproject";
+  src_repo = fetchgit {
+    url = "https://github.com/XmYx/deforum-studio.git";
+    rev = "82248ee33ab576b440eb17daad054677ee33af99"; 
+# Specify the specific commit, tag, or branch
+    sha256 = "sha256-LluW41EXRNJGRorVH4lP3WQotboXwR21+c8FkLKWf18=";
+# SHA256 hash of the source
   };
 
-  propagatedBuildInputs =
-    [ pydantic_1 ];
-  
-  passthru.optional-dependencies = { 
-    diffusers = [
-      diffusers_old
-    ];
-  };    
-  # TODO FIXME
-  doCheck = false;
+  # Extract the specific subdirectory within the repository
+  propagatedBuildInputs = [  
+    setuptools 
+  ];
+  src = src_repo;  # Adjust the path to your desired subdirectory
 
-  #meta = with lib; {
-  #  description = "";
-  #  homepage = "https://richzhang.github.io/PerceptualSimilarity/";
-  #};
-}
+  meta = with lib; {
+    description = "Description of your package";
+    license = licenses.mit;
+  };
+} 

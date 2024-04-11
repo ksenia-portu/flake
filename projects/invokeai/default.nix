@@ -17,6 +17,7 @@ in
         ../../packages/autogen
         ../../packages/flaml
         ../../packages/deforum
+        #../../packages/diffusers_old
         ../../packages/gaussian-splatting
         #../../packages/typeguard
         ../../packages/token-count

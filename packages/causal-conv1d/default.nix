@@ -3,9 +3,9 @@
 , packaging
 , setuptools
 , lib, numpy, tqdm, scipy, torch
-, gcc
+, gcc12
 , cudaPackages
-, stdenv
+, gcc12Stdenv
 , torchvision }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   CUDA_HOME = cudaPackages.cudatoolkit;
   CUDA_VERSION = cudaPackages.cudaVersion;
   
-  nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
+  nativeBuildInputs = lib.optionals gcc12Stdenv.isLinux (with cudaPackages; [
     setuptools
     cuda_nvtx
     cuda_nvcc
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     libcusolver
     libcusparse
     nccl
-    gcc
+    gcc12
   ]);
   
   # TODO FIXME

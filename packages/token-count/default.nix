@@ -1,12 +1,12 @@
 { buildPythonPackage
 , fetchPypi
-, packaging
-, setuptools
-, lib, numpy, tqdm, scipy, torch
-, gcc
-, cudaPackages
-, stdenv
-, torchvision }:
+#, packaging
+#, setuptools
+, lib
+#, numpy, tqdm, scipy, torch
+#, cudaPackages
+#, torchvision 
+}:
 
 buildPythonPackage rec {
   pname = "token-count";

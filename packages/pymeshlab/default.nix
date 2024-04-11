@@ -75,7 +75,7 @@ in
       cgal
       boost
       pkg-config
-      stdenv.cc.cc.lib
+      #stdenv.cc.cc.lib
       libGLU
       qt5.wrapQtAppsHook
       gmp

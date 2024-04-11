@@ -1,12 +1,11 @@
 {
-  stdenv
-  , fetchFromGitHub
+  fetchFromGitHub
   , timm
   , transformers
   , fairscale
   , lib
 }:
-stdenv.mkDerivation rec {
+gcc12Stdenv.mkDerivation rec {
   pname = "blip";
   version = "0.1.0";
 

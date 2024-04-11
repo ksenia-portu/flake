@@ -16,11 +16,11 @@
 , which
 , pybind11
 , torch
-, stdenv
+#, stdenv
+, gcc12Stdenv
 , fetchgit
 }:
 
-#toPythonModule (stdenv.mkDerivation rec {
 buildPythonPackage rec {
   pname = "diff-gaussian-rasterization";
   version = "0.0.0";
@@ -28,13 +28,20 @@ buildPythonPackage rec {
   #format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "graphdeco-inria";
+    owner = "ashawkey";
     repo = "diff-gaussian-rasterization";
-    rev = "59f5f77e3ddbac3ed9db93ec2cfe99ed6c5d121d";
-    hash = "sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
+    rev = "d986da0d4cf2dfeb43b9a379b6e9fa0a7f3f7eea";
+    hash = "sha256-VosVYSjhXCXy3xCrwmumPgyY6baVk6wXAZXk+tP1LD0=";
+#"sha256-SKSSpEa9ydi4+aLPO4cD/N/nYnM9Gd5Wz4nNNvBKb58=";
   };
-  #dontUseCmakeConfigure = true;
-  buildInputs = with cudaPackages; [
+  #TORCH_CUDA_ARCH_LIST="6.1+PTX"; 
+  TORCH_CUDA_ARCH_LIST = "6.0 6.1 6.1+PTX 7.2+PTX 7.5+PTX"; 
+  BUILD_CUDA_EXT = "1"; 
+  CUDA_HOME = cudaPackages.cudatoolkit;
+  CUDA_VERSION = cudaPackages.cudaVersion;
+
+  buildInputs = lib.optionals gcc12Stdenv.isLinux (with cudaPackages; [
+    cuda_nvtx
     cuda_cudart
     cuda_cupti
     cuda_nvrtc
@@ -45,26 +52,24 @@ buildPythonPackage rec {
     libcusolver
     libcusparse
     nccl
-    glm
-  ];
-  postInstall=''cd $src'';
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
-    setuptools
-    cuda_nvtx
-    cmake
-    stdenv.cc
-    cuda_nvcc
     which
     ninja
   ]);
-
+  
   propagatedBuildInputs = [
     setuptools
     torch
+    ninja
+    which
+
+   ];
+ 
+  nativeBuildInputs = [
+    which
+    ninja
+    #rocmPackages.clr
   ];
-  
+   
   meta = with lib; {
     description = "Description of your package";
     license = licenses.mit;

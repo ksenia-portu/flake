@@ -16,8 +16,13 @@ in
         ../../packages/mamba-ssm
         ../../packages/autogen
         ../../packages/flaml
+        #../../packages/cpuinfo
+        #../../packages/typing
         ../../packages/colour-science
         ../../packages/deforum
+        ../../packages/zhipuai
+        ../../packages/simple-lama-inpainting
+        ../../packages/clip-interrogator
         #../../packages/diffusers_old
         ../../packages/gaussian-splatting
         #../../packages/typeguard

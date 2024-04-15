@@ -14,46 +14,10 @@ let
     (builtins.match ".*__version__ = \"([^\"]+)\".*")
     builtins.head
   ];
-  essentials = with pkgs; [
-    inputs.llama.packages.${pkgs.system}.llama-cpp
-    #llama-cpp 
-    #dcgm 
-    autogen
-    rocmPackages.rocm-runtime 
-    cudaPackages.cuda_nvrtc
-    cudaPackages.cudnn
-    gperftools 
-    dlib
-    ffmpeg
-    gcc12
-    glm
-    git
-    glib
-    glibc
-    gmp
-    libsForQt5.full
-    libcxx
-    libffi
-    libffi.dev
-    #libgcc
-    libGL
-    libGLU
-    #stdenv.cc
-    #stdenv.cc.cc
-    zlib
-    zlib.dev
-    zsh
-    #python3Packages.pyqt5
-          ];
-  #cclib = "${pkgs.stdenv.cc.cc.lib}/lib";
-  #nvidialib = "${pkgs.linuxPackages.nvidiaPackages.stable}/lib";
-  opengllib = "/run/opengl-driver/lib";
-  opengllib2 = "${addDriverRunpath.driverLink}/lib";
+  essentials = with pkgs; [ ];
   libpath = pkgs.lib.makeLibraryPath essentials; 
-  LD_LIBRARY_PATH="${opengllib}:${opengllib2}:${libpath}";
-  CUDA_PATH = pkgs.cudatoolkit;
+  LD_LIBRARY_PATH="${libpath}";
   CUDA_HOME = pkgs.cudatoolkit;
-  EXTRA_LDFLAGS = "-L${pkgs.linuxPackages.nvidia_x11}/lib";
 in
 
 python3Packages.buildPythonPackage {
@@ -63,10 +27,15 @@ python3Packages.buildPythonPackage {
   inherit src;
   nativeBuildInputs = with python3Packages; [ 
     inputs.llama.packages.${pkgs.system}.llama-cpp-python    
-    #inputs.ultra.packages.${pkgs.system}.ultralytics
-    pythonRelaxDepsHook pip
+    pythonRelaxDepsHook 
+    pip
   ]; 
   propagatedBuildInputs = with python3Packages; [
+    #typing
+    #cpuinfo
+    zhipuai
+    simple-lama-inpainting
+    clip-interrogator
     colour-science
     deep-translator
     argostranslate
@@ -79,7 +48,7 @@ python3Packages.buildPythonPackage {
     sortedcontainers
     #varname
     #thop
-    diff-gaussian-rasterization
+    #diff-gaussian-rasterization
     #gaussian-splatting
     #mamba-ssm
     #causal-conv1d
@@ -230,6 +199,7 @@ python3Packages.buildPythonPackage {
   ];
   shellHook = ''
     echo "Entering dev shell"
+    export NUMEXPR_MAX_THREADS=14
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
     export CUDA_HOME=${CUDA_HOME}
     export TCMALLOC="" 

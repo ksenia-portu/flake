@@ -49,7 +49,7 @@
         ./overlays
         ./projects/invokeai
         ./projects/textgen
-        ./website
+        #./website
         inputs.flake-parts.flakeModules.easyOverlay #for llama
       ];
     };

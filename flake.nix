@@ -45,6 +45,7 @@
       debug = true;
       imports = [
         hercules-ci-effects.flakeModule
+        ./modules/recursive-packages.nix
 #        ./modules/nixpkgs-config
         ./overlays
         ./projects/invokeai

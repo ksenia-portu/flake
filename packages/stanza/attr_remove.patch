@@ -1,0 +1,12 @@
+diff --git a/stanza/utils/get_tqdm.py b/stanza/utils/get_tqdm.py
+index 7df4dffc..281ca294 100644
+--- a/stanza/utils/get_tqdm.py
++++ b/stanza/utils/get_tqdm.py
+@@ -31,7 +31,7 @@ def get_tqdm():
+         from tqdm import tqdm
+         return tqdm
+ 
+-    if sys.stderr is not None and sys.stderr.isatty():
++    if sys.stderr is not None and hasattr(sys.stderr, "isatty") and sys.stderr.isatty():        
+         from tqdm import tqdm
+         return tqdm

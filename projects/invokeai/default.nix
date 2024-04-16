@@ -16,6 +16,7 @@ in
         ../../packages/mamba-ssm
         ../../packages/autogen
         ../../packages/flaml
+        ../../packages/stanza
         #../../packages/cpuinfo
         #../../packages/typing
         ../../packages/colour-science

@@ -16,7 +16,7 @@ let
   ];
   essentials = with pkgs; [ ];
   libpath = pkgs.lib.makeLibraryPath essentials; 
-  LD_LIBRARY_PATH="${libpath}";
+  LD_LIBRARY_PATH="${libpath}:${pkgs.stdenv.cc.cc.lib.outPath}/lib";
   CUDA_HOME = pkgs.cudatoolkit;
 in
 
@@ -31,8 +31,11 @@ python3Packages.buildPythonPackage {
     pip
   ]; 
   propagatedBuildInputs = with python3Packages; [
+    #torch-bin
     #typing
     #cpuinfo
+    stanza
+    googletrans    
     zhipuai
     simple-lama-inpainting
     clip-interrogator
@@ -204,8 +207,6 @@ python3Packages.buildPythonPackage {
     export CUDA_HOME=${CUDA_HOME}
     export TCMALLOC="" 
     export EXTRA_LDFLAGS=""
-    #echo  $LD_LIBRARY_PATH
-    #echo "it's all relative"
   '';
   patchPhase = ''
     runHook prePatch

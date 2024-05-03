@@ -7,27 +7,23 @@
 , fetchFromGitHub
 , cmake
 , glm
-, gcc12
 , ninja
 , setuptools
 , cudaPackages
 , which
 , torch
-#, stdenv
-, gcc12Stdenv
 , fetchgit
 }:
 
 let
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+  inherit (torch) cudaCapabilities cudaPackages;
   inherit (cudaPackages) backendStdenv;
-in buildPythonApplication ( rec {
-#in buildPythonPackage ( rec {
-#in toPythonModule (gcc12Stdenv.mkDerivation rec {  
+  stdenv = cudaPackages.backendStdenv;
+in
+buildPythonPackage rec {
   pname = "diff-gaussian-rasterization";
   version = "0.0.0";
-  #pyproject = true;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashawkey";
@@ -35,57 +31,36 @@ in buildPythonApplication ( rec {
     rev = "d986da0d4cf2dfeb43b9a379b6e9fa0a7f3f7eea";
     hash = "sha256-VosVYSjhXCXy3xCrwmumPgyY6baVk6wXAZXk+tP1LD0=";
   };
-  #TORCH_CUDA_ARCH_LIST="6.1+PTX"; 
-  #TORCH_CUDA_ARCH_LIST = "6.0 6.1 6.1+PTX 7.2+PTX 7.5+PTX"; 
-  BUILD_CUDA_EXT = "1"; 
-  CUDA_HOME        = cudaPackages.cudatoolkit;
-  CUDA_VERSION     = cudaPackages.cudaVersion;
-  CUDAToolkit_ROOT = cudaPackages.cudatoolkit;
-  CUDACXX = "${cudaPackages.cudatoolkit}/bin/nvcc";
 
-  
-  buildInputs = lib.optionals gcc12Stdenv.isLinux (with cudaPackages; [
-    cuda_cudart
-    cmake
-    glm
-    ninja
-  ]);
+  env = {
+    # Cf. https://github.com/NixOS/nixpkgs/blob/fccb6b42c3cad4e664236de94b0f9a0ea22b1d6e/pkgs/development/python-modules/torch/default.nix#L215
+    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" cudaPackages.cudaFlags.cudaCapabilities;
+  };
 
-  
-  preBuild = ''
-    export CUDA_HOME=${cudaPackages.cuda_nvcc}
-  '';
-
-  #preConfigure = ''
-  #''
-  ## NOTE: We essentially override the compilers provided by stdenv because we don't have a hook
-  ##   for cudaPackages to swap in compilers supported by NVCC.
-  #+ lib.optionalString cudaSupport ''
-  #  export CC=${backendStdenv.cc}/bin/cc
-  #  export CXX=${backendStdenv.cc}/bin/c++
-  #  export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
-  #  export FORCE_CUDA=1
-  #'';
-
-  
-  propagatedBuildInputs = [
+  build-system = [
     setuptools
-    torch
-    ninja
-    cmake
-   ];
-
+  ];
   nativeBuildInputs = [
+    cudaPackages.cuda_nvcc
     ninja
     which
     cmake
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
   ];
-   
+
+  dependencies = [
+    torch
+  ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    glm
+    (lib.getOutput "cxxdev" torch) # Propagates cuda dependencies
+  ];
+
+  # Don't cd into build/ before running pypaBuildPhase
+  dontUseCmakeConfigure = true;
+
   meta = with lib; {
     description = "Description of your package";
     license = licenses.mit;
+    broken = !torch.cudaSupport;
   };
 }
-)
